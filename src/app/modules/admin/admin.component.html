@@ -1,0 +1,13 @@
+<div class="admin-container">
+  <app-sidebar [theme]="theme"></app-sidebar>
+  <app-header [theme]="theme"></app-header>
+  <app-control-sidebar></app-control-sidebar>
+  <div class="content-wrapper relative">
+    <router-outlet (activate)="onActivate($event)"></router-outlet>
+  </div>
+
+  <div class="snowflakes" id="snowflakes" aria-hidden="true" *ngIf="animation">
+    <div class="snowflake" [ngClass]="mouseStop ? 'show': ''" *ngFor="let a of animation['listImg']"
+         [innerHTML]="a"></div>
+  </div>
+</div>
