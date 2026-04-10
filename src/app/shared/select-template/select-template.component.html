@@ -1,0 +1,35 @@
+<div class="select-template-container">
+  <label *ngIf="label !== ''" class="label" [ngClass]="disabled ? 'disabled' : ''">{{label}}</label>
+  <ng-select [class]="class" [(ngModel)]="item" (change)="selectEvent($event)"
+             [ngClass]="hideValue ? 'hide-value' : ''" [placeholder]="placeholder"
+             [bindLabel]="bindLabel" [bindValue]="bindValue" [items]="itemList" [disabled]="disabled"
+             [groupBy]="groupBy" [virtualScroll]="true" [multiple]="multiple" [clearOnBackspace]="true"
+             [closeOnSelect]="closeOnSelect" [clearable]="clearable" [clearSearchOnAdd]="true">
+    <ng-template ng-header-tmp *ngIf="multiple">
+      <div>
+        <button class="btn btn-link" (click)="selectAll()">All</button>
+        <button class="btn btn-link" (click)="clearAll()">Clear</button>
+      </div>
+    </ng-template>
+    <ng-template *ngIf="multiple && lengthGroup > 1" ng-optgroup-tmp let-items="item" let-index="index">
+      <div class="custom-optgroup">
+        <input type="checkbox" class="custom-control-input" id="{{items[groupBy]}}-{{index}}"
+               (change)="selectGroupEvent($event, items[groupBy])"
+               [checked]="groupCheckbox[items[groupBy]] && item.length > 0"/>
+        <label for="{{items[groupBy]}}-{{index}}">{{items[groupBy]}}</label>
+      </div>
+    </ng-template>
+    <ng-template *ngIf="multiple" ng-option-tmp let-item="item" let-index="index" let-item$="item$">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" [ngModel]="item$.selected" class="custom-control-input"/>
+        <label *ngIf="bindLabel && bindLabel.trim() !== ''">{{item[bindLabel]}}</label>
+        <label *ngIf="bindLabel.trim() === ''">{{item}}</label>
+      </div>
+    </ng-template>
+    <ng-template *ngIf="!multiple && bindSubLabel !== ''" ng-option-tmp let-item="item" let-index="index"
+                 let-item$="item$">
+      <span *ngIf="bindLabel && bindLabel.trim() !== ''">{{item[bindLabel]}} - {{item[bindSubLabel]}}</span>
+      <span *ngIf="bindLabel.trim() === ''">{{item}} - {{item[bindSubLabel]}}</span>
+    </ng-template>
+  </ng-select>
+</div>

@@ -1,43 +1,48 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../../_services/auth/auth.service";
 
+declare let particlesJS: any;
+
 @Component({
   selector: 'app-login',
-  template: `
-    <div class="login-page" style="min-height: 100vh;">
-      <div class="login-box">
-        <div class="card card-outline card-primary">
-          <div class="card-header text-center">
-            <h1><b>CMS</b> Sample</h1>
-          </div>
-          <div class="card-body">
-            <p class="login-box-msg">Sign in to start your session</p>
-            <div class="social-auth-links text-center mt-2 mb-3">
-              <button class="btn btn-block btn-primary" (click)="loginWithAzure()">
-                <i class="fab fa-microsoft mr-2"></i> Sign in with Azure
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .login-page {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
-    .login-box { width: 360px; }
-  `]
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
 })
+
 export class LoginComponent implements OnInit {
-  constructor(private authService: AuthService) {}
 
-  ngOnInit(): void {}
+  constructor(private authService: AuthService) {
+  }
 
-  loginWithAzure() {
+  ngOnInit(): void {
+    this.invokeParticles();
+  }
+
+  public invokeParticles(): void {
+    // particles.js configuration - uses particlesjs-config from _models/constants
+    if (typeof particlesJS !== 'undefined') {
+      particlesJS('particles-js', {
+        particles: {
+          number: { value: 80, density: { enable: true, value_area: 800 } },
+          color: { value: '#ffffff' },
+          shape: { type: 'circle' },
+          opacity: { value: 0.5, random: false },
+          size: { value: 3, random: true },
+          line_linked: { enable: true, distance: 150, color: '#ffffff', opacity: 0.4, width: 1 },
+          move: { enable: true, speed: 6, direction: 'none', random: false, straight: false, out_mode: 'out', bounce: false }
+        },
+        interactivity: {
+          detect_on: 'canvas',
+          events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
+          modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
+        },
+        retina_detect: true
+      }, function () {});
+    }
+  }
+
+  login() {
+    this.authService.deleteLocalStorage();
     this.authService.loginWithBE();
   }
 }

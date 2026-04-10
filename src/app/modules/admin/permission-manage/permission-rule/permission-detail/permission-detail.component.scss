@@ -1,0 +1,58 @@
+.permission-detail-container {
+  .modal-header {
+    background-color: #17a2b8;
+    color: white;
+  }
+
+  .modal-body {
+    overflow: auto;
+    padding-bottom: 0;
+
+    .post {
+      margin-bottom: 0;
+      border: none;
+
+      .title {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .info {
+        display: flex;
+
+        .left {
+          margin-right: 35px;
+        }
+      }
+
+      .item {
+        margin-bottom: 10px;
+
+        input {
+          padding: 4px 10px;
+          border-radius: 4px;
+          border: 1px solid #dbdbdb;
+          width: 60%;
+          margin-left: 8px;
+          outline: none;
+        }
+
+        .group-select {
+          .row {
+            justify-content: center;
+
+            .select-item {
+              margin-top: 5px;
+            }
+          }
+        }
+
+        button {
+          i {
+            margin-right: 5px;
+          }
+        }
+      }
+    }
+  }
+}

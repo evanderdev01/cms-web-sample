@@ -1,0 +1,188 @@
+<section class="dashboard-container" id="dashboard">
+  <div class="container-fluid" *ngIf="isShowMap">
+    <div class="card card-info col-12">
+      <div class="card-body row">
+        <div *ngIf="markers && markers.length > 0" class="left-container col-11 col-md-7 col-xl-6">
+          <div class="filter">
+            <div class="item" *ngFor="let l of branchList" [ngClass]="element.company === l.company ? 'active' : ''">
+              <div class="top" (click)="receiveSelectEvent(l, 'branch')">{{l.company}}</div>
+              <div class="bottom">
+                <ng-container *ngFor="let p of parentDepartList">
+                  <div *ngIf="p.company === l.company" class="name"
+                       [ngClass]="element.parent_depart === p.name ? 'active' : ''"
+                       (click)="receiveSelectEvent(p, 'parent_depart')">{{p.name}}</div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="filter-ng-select col-6 col-md-4">
+            <div class="search-btn">
+              <div class="sum">
+                <ng-container *ngIf="element.agency_inside">{{element.agency_inside}}
+                  <div class="clear-btn" (click)="receiveSelectEvent(element, 'close')"><i class="fa-solid fa-xmark"></i></div>
+                </ng-container>
+                <ng-container *ngIf="!element.agency_inside">Agency
+                  <div>({{agencyList.length}})</div>
+                </ng-container>
+              </div>
+            </div>
+            <div class="select-template">
+              <app-select-template [itemList]="agencyList" [item]="element.agency_inside" [closeOnSelect]="true"
+                                   [multiple]="false" [hideValue]="true" [clearable]="false" [bindSubLabel]="'city'"
+                                   placeholder="Search agency" [bindLabel]="'agency_inside'"
+                                   (dataEvent)="receiveSelectEvent($event, 'agency')" [class]="'custom map'">
+              </app-select-template>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="markers && markers.length > 0" class="right-container col-12 col-md-4">
+          <div class="search-btn">
+            <input type="text" placeholder="Enter employee code / Email / Name"
+                   (keypress)="eventButton($event)" [(ngModel)]="element.textSearch"/>
+            <div class="close-btn" *ngIf="element.textSearch.trim() !== ''"
+                 (click)="receiveSelectEvent(element, 'close')">
+              <i class="fa-solid fa-xmark"></i>
+            </div>
+            <button class="icon-search" [disabled]="element.textSearch === ''" (click)="searchPerson()">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </div>
+
+          <div class="table-dashboard" *ngIf="agencyList && agencyList.length > 0 && !tableAgency && !personList">
+            <div class="card">
+              <div class="card-header">Statistics for region <span>{{element.company}}</span>
+                <ng-container *ngIf="element.parent_depart"><span> - {{element.parent_depart}}</span></ng-container>
+              </div>
+              <div class="card-body">
+                <table class="table">
+                  <thead>
+                  <tr>
+                    <th>Agency<div>({{agencyList.length}})</div></th>
+                    <th>Block<div>(Count)</div></th>
+                    <th>Manager<div>(Count)</div></th>
+                    <th>Staff<div>(Count)</div></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let d of agencyList">
+                    <td (click)="receiveSelectEvent(d, 'agency')">{{d.agency_inside}}</td>
+                    <td>{{d.numberBlock}}</td>
+                    <td>{{d.numberManager}}</td>
+                    <td>{{d.numberEmp}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-dashboard agency" *ngIf="tableAgency && !personList">
+            <div class="card">
+              <div class="card-header">
+                Agency Info <span>{{tableAgency.agency_inside}}</span>
+                <div class="close-btn" (click)="receiveSelectEvent(element, 'close')">
+                  <i class="fa-solid fa-xmark"></i>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="main-container">
+                  <div class="title">
+                    <div class="top">
+                      Region {{tableAgency.company}} <i class="fa-solid fa-circle"></i>
+                      {{tableAgency.parent_depart}} <i class="fa-solid fa-circle"></i> {{tableAgency.city}}
+                    </div>
+                  </div>
+                  <div class="content">
+                    <div class="item row">
+                      <div class="left col-5">Manager:</div>
+                      <div class="right col-6">{{tableAgency.technical_manager}}</div>
+                    </div>
+                    <div class="item row">
+                      <div class="left col-5">Block count:</div>
+                      <div class="right col-6">{{tableAgency.numberBlock}}</div>
+                    </div>
+                    <div class="item row">
+                      <div class="left col-5">Staff count:</div>
+                      <div class="right col-6">{{tableAgency.numberEmp}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-dashboard agency person" *ngIf="personList">
+            <div class="card">
+              <div class="card-header">
+                Search Results <span style="color: #8E98A4;">({{personList.length}})</span>
+                <div class="close-btn" (click)="receiveSelectEvent(element, 'close')">
+                  <i class="fa-solid fa-xmark"></i>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="main-container">
+                  <div class="post-item" *ngFor="let p of personList"
+                       (click)="receiveSelectEvent(p, 'agency')">
+                    <div class="name">{{p.empName}}<i class="fa-solid fa-circle"></i><span>{{p.jobTitle}}</span></div>
+                    <div class="info">
+                      <div class="mnv"><i class="fa-regular fa-address-card"></i>{{p.empCode}} <span style="color: #DDE0E4">|</span></div>
+                      <div class="email"><i class="fa-regular fa-envelope"></i>{{p.email}}</div>
+                    </div>
+                    <div class="agency-info row">
+                      <div class="col-3 item">
+                        <div class="top">Region</div>
+                        <div class="bottom">{{p.company}}</div>
+                      </div>
+                      <div class="col-3 item">
+                        <div class="top">Zone</div>
+                        <div class="bottom">{{p.parentDepart}}</div>
+                      </div>
+                      <div class="col-3 item">
+                        <div class="top">Agency</div>
+                        <div class="bottom">{{p.agency}}</div>
+                      </div>
+                      <div class="col-3 item">
+                        <div class="top">Department</div>
+                        <div class="bottom">{{p.childDepart}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="leaflet-map">
+          <div id="map"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wave animation when map is not shown -->
+  <div class="container-fluid animation-wave" *ngIf="!isShowMap">
+    <div class="header">
+      <div class="inner-header flex">
+        <div class="text"></div>
+      </div>
+      <div>
+        <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+             viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+          <defs>
+            <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"/>
+          </defs>
+          <g class="parallax">
+            <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7"/>
+            <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)"/>
+            <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)"/>
+            <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="content flex"></div>
+  </div>
+</section>
+<app-spinner-layout></app-spinner-layout>

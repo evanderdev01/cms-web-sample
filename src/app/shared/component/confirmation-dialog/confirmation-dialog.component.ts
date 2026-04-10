@@ -1,25 +1,28 @@
-import {Component} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-confirmation-dialog',
-  template: `
-    <div class="modal-header">
-      <h4 class="modal-title">{{title}}</h4>
-    </div>
-    <div class="modal-body">
-      <p>{{message}}</p>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="decline()">Cancel</button>
-      <button type="button" class="btn btn-primary" (click)="accept()">Confirm</button>
-    </div>
-  `,
-  styles: []
+  templateUrl: './confirmation-dialog.component.html',
+  styleUrls: ['./confirmation-dialog.component.scss']
 })
-export class ConfirmationDialogComponent {
-  title: string;
-  message: string;
+export class ConfirmationDialogComponent implements OnInit {
+  @Input() title: any;
+  @Input() message: any;
+  @Input() btnOkText: any;
+  @Input() btnCancelText: any;
 
-  accept() {}
-  decline() {}
+  constructor(private activeModal: NgbActiveModal) {
+  }
+
+  ngOnInit() {
+  }
+
+  public decline() {
+    this.activeModal.close(false);
+  }
+
+  public accept() {
+    this.activeModal.close(true);
+  }
 }

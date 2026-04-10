@@ -1,0 +1,61 @@
+<aside class="main-sidebar sidebar-dark-primary elevation-4" [ngClass]="theme ? 'theme' : ''"
+       [ngStyle]="{'background': theme ? theme['backgroundSidebar'] : ''}">
+  <div class="background-theme" *ngIf="theme" [ngStyle]="{'opacity': theme['backgroundOpacity']}">
+    <img *ngIf="theme['backgroundUrlSidebar']" [src]="theme['backgroundUrlSidebar']" alt="CMS Sample">
+  </div>
+  <!-- Brand Logo -->
+  <a href="api/auth/dashboard" class="brand-link"
+     [style]="theme ? 'background: ' + theme['backgroundBrand'] + '!important': ''"
+     [ngStyle]="{'border-color': theme ? theme['borderBrandColor'] : ''}">
+    <div class="icon-theme brand-text" *ngIf="theme" [ngStyle]="{'top': theme['topIconSidebar']}">
+      <img [src]="theme['iconUrlSidebar']" alt="CMS Sample">
+    </div>
+    <img src="assets/images/logo.svg" alt="CMS Sample" class="brand-image"
+         [ngStyle]="{'filter': theme ? theme['filter'] : ''}">
+    <span class="brand-text font-weight-light">CMS Sample</span>
+  </a>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <ng-container *ngFor="let m of menuList">
+          <li class="nav-item" *ngIf="m.right" [ngClass]="this.url?.includes(m.link) ? 'menu-open menu-is-opening' : ''">
+            <a [routerLink]="m.list ? null : m['link']" class="nav-link" (click)="m.link === 'logout' ? logout(): ''"
+               [ngStyle]="{'color': theme ? theme['colorText'] : ''}"
+               [ngClass]="[this.url?.includes(m.link) ? 'active' : '', m.link === 'logout' ? 'logout' : '', theme ? theme['nameClassActive'] : '']">
+              <i class="nav-icon" [ngClass]="m.icon" style="margin-right: 0.4rem"></i>
+              <p>{{m.title}}<i *ngIf="m.list" class="right fas fa-angle-left"></i></p>
+            </a>
+            <ul class="nav nav-treeview" *ngIf="m.list">
+              <ng-container *ngFor="let l of m['list']">
+                <li class="nav-item" *ngIf="l.right" [ngClass]="this.url?.includes(l.link) ? 'menu-open menu-is-opening' : ''">
+                  <a [routerLink]="l.list ? null : l['link']" class="nav-link"
+                     [ngStyle]="{'color': theme ? theme['colorText'] : ''}"
+                     [ngClass]="[this.url?.includes(m.link) && this.url?.includes(l.link) ? 'active' : '', theme ? theme['nameClassActive'] : '']">
+                    <i class="fas fa-circle" style="margin-right: 0.5rem; margin-left: 0.5rem;"></i>
+                    <p>{{l.title}}<i *ngIf="l.list" class="right fas fa-angle-left"></i></p>
+                  </a>
+                  <ul class="nav nav-treeview" *ngIf="l.list">
+                    <ng-container *ngFor="let k of l['list']">
+                      <li class="nav-item" *ngIf="k.right">
+                        <a routerLink="{{k.link}}" class="nav-link last"
+                           [ngStyle]="{'color': theme ? theme['colorText'] : ''}"
+                           [ngClass]="[this.url?.includes(m.link) && this.url?.includes(l.link) && this.url?.includes(k.link) ? 'active' : '',
+                           theme ? theme['nameClassActive'] : '']">
+                          <i class="far fa-dot-circle nav-icon" style="visibility: hidden"></i>
+                          <p>{{k.title}}</p>
+                        </a>
+                      </li>
+                    </ng-container>
+                  </ul>
+                </li>
+              </ng-container>
+            </ul>
+          </li>
+        </ng-container>
+      </ul>
+    </nav>
+  </div>
+</aside>

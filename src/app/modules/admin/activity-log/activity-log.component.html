@@ -1,0 +1,230 @@
+<section class="content activity-log-container">
+  <div class="container-fluid">
+    <div class="my-filter">
+      <div class="card card-info card-tabs">
+        <div class="card-header p-0 pt-1">
+          <nav class="nav nav-tabs" id="myTab">
+            <a (click)="searchItem.typeSearch = 'all'" class="nav-link active" data-bs-toggle="tab" href="#one"
+               id="one-tab" onKeyDown="">Xem tất cả</a>
+            <a (click)="searchItem.typeSearch = 'overview'" class="nav-link" data-bs-toggle="tab" href="#two"
+               id="two-tab" onKeyDown="">Tổng quan</a>
+            <a (click)="searchItem.typeSearch = 'person'" class="nav-link" data-bs-toggle="tab" href="#three"
+               id="three-tab" onKeyDown="">Xem theo cá nhân</a>
+            <a (click)="searchItem.typeSearch = 'func'" class="nav-link" data-bs-toggle="tab" href="#four"
+               id="four-tab" onKeyDown="">Xem theo chức năng</a>
+          </nav>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <ng-container *ngIf="searchItem.typeSearch === 'person'">
+              <div class="col-12 col-md-4 item">
+                <label>Tìm kiếm</label>
+                <input (ngModelChange)="isEmptyPerson = false" [(ngModel)]="searchItem.textSearch"
+                       placeholder="Họ tên hoặc email"
+                       type="text"/>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="searchItem.typeSearch === 'func' && listFunctionData">
+              <div class="col-6 col-md-2 item">
+                <app-select-template (dataEvent)="allgetFunctionData($event, 'functionCode')"
+                                     [bindLabel]="'function_name'"
+                                     [bindValue]="'function_code'" [closeOnSelect]="true"
+                                     [itemList]="listFunctionData" [item]="searchItem.functionCode"
+                                     [label]="'Tên chức năng'">
+                </app-select-template>
+              </div>
+              <div class="col-12 col-md-4 col-xl-3 item">
+                <app-select-template (dataEvent)="allgetFunctionData($event, 'actionCode')" [bindLabel]="'action_name'"
+                                     [bindValue]="'action_code'" [clearable]="true"
+                                     [disabled]="listActionData.length === 0" [itemList]="listActionData"
+                                     [item]="searchItem.actionCode" [label]="'Tên hành động'"
+                                     [multiple]="true">
+                </app-select-template>
+              </div>
+            </ng-container>
+            <div class="col-12 col-md-3 col-xl-2 item date-range">
+              <label>Từ ngày - Đến ngày</label>
+              <div class="date-select">
+                <mat-date-range-input [max]="maxDate" [rangePicker]="rangePicker">
+                  <input [(ngModel)]="searchItem.startDate" matStartDate placeholder="dd/mm/yyyy" readonly>
+                  <input [(ngModel)]="searchItem.endDate" matEndDate placeholder="dd/mm/yyyy" readonly>
+                </mat-date-range-input>
+                <mat-datepicker-toggle [for]="rangePicker"></mat-datepicker-toggle>
+                <mat-date-range-picker #rangePicker></mat-date-range-picker>
+              </div>
+            </div>
+            <div *ngIf="isEmptyPerson && searchItem.typeSearch === 'person'" class="note">
+              Vui lòng nhập cá nhân cần xem thông tin!
+            </div>
+            <div class="group-btn-filter">
+              <button (click)="getData()" class="btn btn-info" type="button">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <div>Xem</div>
+              </button>
+              <button (click)="getAllLogUser()"
+                      *ngIf="searchItem.typeSearch === 'overview'" class="btn btn-primary"
+                      type="button">
+                <i class="fa-solid fa-download"></i>
+                <div>Xuất báo cáo</div>
+              </button>
+            </div>
+          </div>
+
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="one">
+              <div class="my-chart row justify-content-center">
+                <div [ngStyle]="{'height': !myChart ? '0px' : ''}" class="bar-chat col-12 col-md-10">
+                  <canvas id="myChart"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="two">
+              <div class="row" style="margin-top: 15px;">
+                <div *ngIf="overviewData && overviewData.length > 0" class="col-12 col-md-8">
+                  <div class="accordion" id="accordionPanelsStayOpenExample">
+                    <ng-container *ngFor="let d of overviewData; let i = index">
+                      <div class="accordion-item">
+                        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                          <button [attr.data-bs-target]="'#' + 'head' + i" class="accordion-button"
+                                  data-bs-toggle="collapse" type="button">
+                            {{d.name}} - {{d.count}}
+                          </button>
+                        </h2>
+                        <div aria-labelledby="panelsStayOpen-headingOne" class="accordion-collapse collapse show"
+                             id="{{'head' + i}}">
+                          <div class="accordion-body">
+                            <table class="table table-bordered table-striped" style="min-width: 100%; margin-top: 0;">
+                              <thead>
+                              <tr>
+                                <th style="width: 90%"> Hành động</th>
+                                <th> Số lượt thực hiện</th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <tr *ngFor="let c of overviewData[i].action">
+                                <td>{{c.name}}</td>
+                                <td>{{c.count}}</td>
+                              </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                        <button [attr.data-bs-target]="'#head-sum'" class="accordion-button"
+                                 type="button">
+                          Tổng - {{sumDataOverview}}
+                        </button>
+                      </h2>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="pieChart" class="col-12 col-md-4 pie-chart">
+                  <app-piechart [dataSum]="pieChart" [label]="lablePieChart"
+                                [nameChart]="'Báo cáo lịch sử người dùng'" [pieBackgroundConfig]="pieBackgroundConfig"
+                                [title]="'Tổng quan'"></app-piechart>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="three">
+              <ng-container *ngIf="dataTablePerson && dataTablePerson.length > 0">
+                <table class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <ng-container *ngFor="let c of columnTable">
+                      <th *ngIf="c !== 'id'">{{dictKeyList[c]}}</th>
+                    </ng-container>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr
+                    *ngFor="let d of dataTablePerson | paginate: { itemsPerPage: itemPerPagePerson, currentPage: pagePerson, totalItems: totalItemsPerson }; let i = index">
+                    <td style="width: 10px;">
+                      <span>{{i + 1}}</span>
+                    </td>
+                    <td>
+                      <span>{{d.email}}</span>
+                    </td>
+                    <td style="width: 85%;">
+                      <ng-container *ngIf="d.branch !== ''; else elseBlock">
+                        <span>
+                          <b>{{d.fullName}}({{d.branch}}/{{d.parentDepart}}/{{d.agency}}/{{d.childDepart}}
+                            )</b> đã <b>{{d.actionName}}</b> ở chức năng <b>{{d.functionName}}</b>
+                        </span>
+                      </ng-container>
+                      <ng-template #elseBlock>
+                        <span>
+                          <b>{{d.fullName}}</b> đã <b>{{d.actionName}}</b> ở chức năng <b>{{d.functionName}}</b>
+                        </span>
+                      </ng-template>
+                    </td>
+                    <td style="width: 100%;">
+                      <span>{{d.dateCreated}}</span>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+                <app-pagination-template (itemPerPageEvent)="itemPerPagePerson = $event"
+                                         (pageEvent)="pageChangeEvent($event)"
+                                         [itemPerPage]="itemPerPagePerson"
+                                         [total]="totalItemsPerson"></app-pagination-template>
+              </ng-container>
+            </div>
+            <div class="tab-pane fade" id="four">
+              <div *ngIf="dataTableFuncName && dataTableFuncName.length === 0" style="margin-top: 15px;">Không có dữ
+                liệu
+              </div>
+              <ng-container *ngIf="dataTableFuncName && dataTableFuncName.length > 0">
+                <table class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <ng-container *ngFor="let c of columnTable">
+                      <th *ngIf="c !== 'id'">{{dictKeyList[c]}}</th>
+                    </ng-container>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr
+                    *ngFor="let d of dataTableFuncName | paginate: { itemsPerPage: itemPerPageFuncName, currentPage: pageFuncName, totalItems: totalItemsFuncName }; let i = index">
+                    <td style="width: 10px;">
+                      <span>{{i + 1}}</span>
+                    </td>
+                    <td>
+                      <span>{{d.email}}</span>
+                    </td>
+                    <td style="width: 85%;">
+                      <ng-container *ngIf="d.branch !== ''; else elseBlock">
+                        <span>
+                          <b>{{d.fullName}}({{d.branch}}/{{d.parentDepart}}/{{d.agency}}/{{d.childDepart}}
+                            )</b> đã <b>{{d.actionName}}</b> ở chức năng <b>{{d.functionName}}</b>
+                        </span>
+                      </ng-container>
+                      <ng-template #elseBlock>
+                        <span>
+                          <b>{{d.fullName}}</b> đã <b>{{d.actionName}}</b> ở chức năng <b>{{d.functionName}}</b>
+                        </span>
+                      </ng-template>
+                    </td>
+                    <td style="width: 100%;">
+                      <span>{{d.dateCreated}}</span>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+                <app-pagination-template (itemPerPageEvent)="itemPerPageFuncName = $event"
+                                         (pageEvent)="pageChangeEvent($event)"
+                                         [itemPerPage]="itemPerPageFuncName"
+                                         [total]="totalItemsFuncName"></app-pagination-template>
+              </ng-container>
+            </div>
+            <div class="tab-pane fade" id="five">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-spinner-layout></app-spinner-layout>

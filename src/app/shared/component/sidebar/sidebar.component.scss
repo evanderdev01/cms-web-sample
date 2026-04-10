@@ -1,0 +1,120 @@
+.main-sidebar {
+  background: linear-gradient(180deg, #1d3247 0%, #1c558c 46%, #0f6272 76%);
+
+  .brand-link {
+    display: flex;
+    background-color: #20364c !important;
+
+    .brand-image {
+      &.text {
+        width: 70px;
+        object-fit: cover;
+        position: absolute;
+        top: 18px;
+        left: 42px;
+      }
+    }
+
+    .icon-theme {
+      position: absolute;
+      height: 100%;
+      width: fit-content;
+      top: 4px;
+      right: 5px;
+      transition: all 0.2s;
+
+      img {
+        height: 100%;
+      }
+    }
+  }
+
+  .sidebar {
+    .nav-sidebar {
+      .nav-item {
+        &:hover {
+          cursor: pointer;
+        }
+
+        .nav-link {
+          &.logout {
+            display: none;
+          }
+        }
+
+        .nav-item {
+          .nav-item {
+            .nav-link {
+              &.active {
+                background-color: rgb(207 207 207 / 39%);
+                color: white;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.theme {
+    .background-theme {
+      position: absolute;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .sidebar {
+      .nav-sidebar {
+        .nav-item {
+          .nav-link {
+            &.active {
+              &.christmas {
+                background-color: rgb(255 255 255 / 68%);
+                color: #092465 !important;
+              }
+
+              &.tet1 {
+                background-color: rgb(255 255 255 / 68%);
+                color: #b31111 !important;
+              }
+            }
+          }
+
+          .nav-item {
+            .nav-link {
+              &.active {
+                &.christmas {
+                  background-color: rgb(218 236 243 / 30%);
+                  color: white !important;
+                }
+
+                &.tet1 {
+                  background-color: rgb(218 236 243 / 38%);
+                  color: white !important;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .main-sidebar {
+    .sidebar {
+      .nav-sidebar {
+        .nav-item {
+          .nav-link {
+            &.logout {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+.lucky-number-container {
+  padding: 15px 0.5rem;
+
+  .container-fluid {
+    .row {
+      .my-filter {
+        .card-body {
+          padding: 0 1.25rem 1.25rem 1.25rem;
+
+          .row {
+            .item {
+              padding-top: 0.75rem;
+
+              input {
+                padding: 4px 10px;
+                border-radius: 4px;
+                border: 1px solid #dbdbdb;
+                font-size: 1rem;
+                width: 100%;
+                outline: none;
+              }
+            }
+
+            .button {
+              display: flex;
+              align-items: flex-end;
+              margin-top: 1rem;
+            }
+          }
+        }
+      }
+
+      .my-table {
+        .card-body {
+          table {
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .lucky-number-container {
+    .my-table {
+      .card-body {
+        table {
+          width: inherit;
+          display: block;
+          overflow-x: auto;
+          font-size: 13px;
+        }
+      }
+    }
+  }
+}

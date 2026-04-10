@@ -1,0 +1,91 @@
+<section class="content lucky-number-container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 my-filter">
+        <div class="card card-info card-tabs">
+          <div class="card-header p-0 pt-1">
+            <nav class="nav nav-tabs" id="myTab">
+              <a class="nav-link active" id="draw-tab" data-bs-toggle="tab" href="#draw"
+                 (click)="tab = 1" onKeyDown="">Quay số</a>
+              <a class="nav-link" id="report-tab" data-bs-toggle="tab" href="#report"
+                 (click)="tab = 2" onKeyDown="">Danh sách trúng giải</a>
+            </nav>
+          </div>
+          <div class="card-body">
+            <div class="tab-content" id="myTabContent">
+              <div class="tab-pane fade show active" id="draw">
+                <div class="row">
+                  <div class="col-12 col-md-3 item">
+                    <app-select-template [itemList]="prizeList" [label]="'Giải thưởng'" [item]="prize"
+                                         [multiple]="false" (dataEvent)="receiveSelectEvent($event, 'prize')"
+                                         [bindValue]="'id'" [bindLabel]="'name'" [closeOnSelect]="true">
+                    </app-select-template>
+                  </div>
+                  <div class="col-6 col-md-2 button">
+                    <button type="button" class="btn btn-block bg-gradient-success"
+                            (click)="getPrize()" [disabled]="!detailedPath">Quay số
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="report">
+                <div class="row">
+                  <div class="col-12 col-md-3 item">
+                    <app-select-template [itemList]="reportList" [label]="'Giải thưởng'" [item]="report"
+                                         [multiple]="false" (dataEvent)="receiveSelectEvent($event, 'report')"
+                                         [bindValue]="'value'" [bindLabel]="'name'" [closeOnSelect]="true">
+                    </app-select-template>
+                  </div>
+                  <div class="col-6 col-md-2 col-xl-1 button">
+                    <button type="button" class="btn btn-block btn-info" (click)="getData('view')">Xem</button>
+                  </div>
+                  <div class="col-6 col-md-2 button">
+                    <button type="button" class="btn btn-block btn-outline-primary" (click)="getData('save')">Xuất báo
+                      cáo
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 my-table" *ngIf="dataTable && tab === 2">
+        <div class="card">
+          <div class="card-body">
+            <div *ngIf="dataTable.length === 0">Không có dữ liệu</div>
+            <ng-container *ngIf="dataTable.length > 0">
+              <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>Họ và tên</th>
+                  <th>Email</th>
+                  <th>Mã nhân viên</th>
+                  <th>Bộ phận</th>
+                  <th>Giải</th>
+                  <th>Thời gian</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let d of dataTable | paginate: { itemsPerPage: itemPerPage, currentPage: page }">
+                  <td>{{d.ho_va_ten}}</td>
+                  <td>{{d.email}}</td>
+                  <td>{{d.emp_code}}</td>
+                  <td>{{d.phong_ban}}</td>
+                  <td>{{d.giai_quay}}</td>
+                  <td></td>
+                </tr>
+                </tbody>
+              </table>
+              <app-pagination-template (pageEvent)="page = $event" [total]="dataTable.length"
+                                       [itemPerPage]="itemPerPage"
+                                       (itemPerPageEvent)="itemPerPage = $event"></app-pagination-template>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-spinner-layout></app-spinner-layout>

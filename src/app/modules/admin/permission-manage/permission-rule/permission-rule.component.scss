@@ -1,0 +1,164 @@
+.permission-rule-container {
+  padding: 15px 0.5rem;
+
+  .my-filter {
+    .card-info {
+      .card-body {
+        padding-top: 0;
+
+        .tab-pane {
+          .title {
+            font-size: 20px;
+            font-weight: bold;
+          }
+
+          .group-radio {
+            display: flex;
+            width: fit-content;
+            margin-top: 0.7rem;
+
+            .container {
+              position: relative;
+              padding-left: 26px;
+              padding-right: 0;
+              font-weight: normal;
+              cursor: pointer;
+              line-height: 1.8;
+              -webkit-user-select: none;
+              -moz-user-select: none;
+              -ms-user-select: none;
+              user-select: none;
+              margin: 0;
+
+              &:first-child {
+                margin-right: 20px;
+              }
+
+              &.disabled {
+                color: #aca9a9;
+              }
+
+              &:hover {
+                input {
+                  & ~ .checkmark {
+                    background-color: #ccc;
+                  }
+                }
+              }
+
+              input {
+                position: absolute;
+                opacity: 0;
+                cursor: pointer;
+                height: 0;
+                width: 0;
+
+                &:checked {
+                  & ~ .checkmark {
+                    background-color: #2196F3;
+
+                    &:after {
+                      display: block;
+                    }
+                  }
+                }
+              }
+
+              .checkmark {
+                position: absolute;
+                top: 2px;
+                left: 0;
+                height: 21px;
+                width: 21px;
+                background-color: #eee;
+                border-radius: 50%;
+
+                &:after {
+                  content: "";
+                  position: absolute;
+                  display: none;
+                  top: 7px;
+                  left: 7px;
+                  width: 7px;
+                  height: 7px;
+                  border-radius: 50%;
+                  background: white;
+                }
+              }
+            }
+          }
+
+          .note {
+            color: #e50000;
+            margin-top: 8px;
+
+            i {
+              margin-right: 5px;
+            }
+          }
+
+          .my-table {
+            margin-top: 15px;
+
+            table {
+              white-space: nowrap;
+              overflow: auto;
+              display: block;
+
+              tbody {
+                td {
+                  div {
+                    display: block;
+                    border: none;
+                    max-width: 400px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                  }
+                }
+              }
+            }
+          }
+
+          .row {
+            .item {
+              padding-top: 0.75rem;
+
+              input {
+                padding: 4px 10px;
+                border-radius: 4px;
+                border: 1px solid #dbdbdb;
+                width: 100%;
+                outline: none;
+              }
+            }
+
+            .group-btn-filter {
+              width: fit-content;
+              height: fit-content;
+              margin-top: auto;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .permission-rule-container {
+    .my-filter {
+      .card-info {
+        .card-body {
+          .tab-pane {
+            .my-table {
+              table {
+                font-size: 10px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

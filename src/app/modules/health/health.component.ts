@@ -2,13 +2,14 @@ import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-health',
-  template: `<div>{{response}}</div>`,
-  styles: []
+  templateUrl: './health.component.html',
+  styleUrls: ['./health.component.scss']
 })
 export class HealthComponent implements OnInit {
   response: any;
 
-  constructor() {}
+  constructor() {
+  }
 
   ngOnInit(): void {
     this.healthCheck();

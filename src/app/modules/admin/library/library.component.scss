@@ -1,0 +1,79 @@
+.library-container {
+  padding: 15px 0.5rem;
+
+  .my-filter {
+    .card-body {
+      padding: 0 1.25rem 1.25rem 1.25rem;
+
+      .row {
+        .item {
+          padding-top: 0.75rem;
+
+          input {
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: 1px solid #dbdbdb;
+            width: 100%;
+            outline: none;
+          }
+
+          .date-select {
+            position: relative;
+
+            &:hover {
+              cursor: pointer;
+            }
+          }
+        }
+
+        .button {
+          display: flex;
+          align-items: flex-end;
+          margin-top: 1rem;
+        }
+      }
+    }
+  }
+
+  .my-table {
+    .card-body {
+      table {
+        white-space: nowrap;
+
+        td {
+          span {
+            max-width: 245px;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          a {
+            color: #007bff;
+            font-weight: bold;
+            cursor: pointer;
+
+            &:hover {
+              color: #0056b3;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1199px) {
+  .library-container {
+    .my-table {
+      .card-body {
+        table {
+          width: inherit;
+          display: block;
+          overflow-x: auto;
+        }
+      }
+    }
+  }
+}

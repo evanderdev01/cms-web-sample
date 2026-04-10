@@ -1,0 +1,26 @@
+<aside class="control-sidebar control-sidebar-dark">
+  <div class="background-option main">
+    <div class="title">Change Theme</div>
+    <div class="list-item">
+      <div class="item">
+        <app-select-template [itemList]="themeList" [label]="''"
+                             [item]="theme" [closeOnSelect]="true" [clearable]="true"
+                             [bindLabel]="'label'"
+                             (dataEvent)="updateUI($event, 'theme')">
+        </app-select-template>
+      </div>
+    </div>
+  </div>
+  <div class="animate-option main">
+    <div class="title">Change Animation</div>
+    <div class="list-item">
+      <div class="item">
+        <app-select-template [itemList]="animationList" [label]="'Snowfall'"
+                             [item]="animation" [closeOnSelect]="true" [clearable]="true"
+                             [bindLabel]="'label'"
+                             (dataEvent)="updateUI($event, 'animation')">
+        </app-select-template>
+      </div>
+    </div>
+  </div>
+</aside>

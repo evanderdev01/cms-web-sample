@@ -1,0 +1,302 @@
+.lucky-number-detail-container {
+  margin: 0;
+  margin-bottom: calc(-3.5rem - 1px);
+  height: 100%;
+  padding: 0;
+  width: 100%;
+  background: #FFF;
+
+  .background {
+    background: linear-gradient(132deg, #FC415A, #2399d7, #3f7833);
+    background-size: 400% 400%;
+    animation: Gradient 15s ease infinite;
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+
+    .cube {
+      position: absolute;
+      top: 80vh;
+      left: 45vw;
+      width: 10px;
+      height: 10px;
+      border: solid 1px #D7D4E4;
+      transform-origin: top left;
+      transform: scale(0) rotate(0deg) translate(-50%, -50%);
+      animation: cube 12s ease-in forwards infinite;
+
+      &:nth-child(2n) {
+        border-color: #FFF;
+      }
+
+      &:nth-child(2) {
+        animation-delay: 2s;
+        left: 25vw;
+        top: 40vh;
+      }
+
+      &:nth-child(3) {
+        animation-delay: 4s;
+        left: 75vw;
+        top: 50vh;
+      }
+
+      &:nth-child(4) {
+        animation-delay: 6s;
+        left: 90vw;
+        top: 10vh;
+      }
+
+      &:nth-child(5) {
+        animation-delay: 8s;
+        left: 10vw;
+        top: 85vh;
+      }
+
+      &:nth-child(6) {
+        animation-delay: 10s;
+        left: 50vw;
+        top: 10vh;
+      }
+    }
+  }
+
+  .title {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    text-align: center;
+    transform: translateX(-50%);
+    width: 30rem;
+
+    .image {
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    h1 {
+      color: #0c3756;
+      text-transform: uppercase;
+      font-size: 1.5rem;
+      letter-spacing: 1px;
+      font-weight: bold;
+      margin: 0;
+      position: absolute;
+      top: 40%;
+      transform: translateX(-50%);
+      left: 52%;
+      width: 100%;
+    }
+  }
+
+  .number-container {
+    position: absolute;
+    top: 9.5rem;
+    left: 0;
+    width: 100%;
+    margin-top: 5%;
+    padding: 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    color: black;
+
+    .number {
+      font-size: 6.5rem;
+      background-color: wheat;
+      margin-right: 30px;
+      border-radius: 10px;
+      padding: 0 25px;
+      box-shadow: 5px 5px 15px #343434;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .group-btn {
+    position: absolute;
+    top: 30rem;
+    left: 0;
+    width: 100%;
+    text-align: center;
+
+    button {
+      color: #164e71;
+      font-size: 1.5rem;
+      background: #ffffff;
+      border-radius: 15px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-weight: bold;
+      border: 4px solid #959090;
+
+      &:hover {
+        border-radius: 0;
+      }
+    }
+  }
+
+  .result {
+    position: absolute;
+    top: 30rem;
+    left: 0;
+    width: 100%;
+    font-size: 2.5rem;
+    text-align: center;
+    color: #fee028;
+  }
+
+  .pyro {
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+}
+
+@keyframes Gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes cube {
+  from {
+    transform: scale(0) rotate(0deg) translate(-50%, -50%);
+    opacity: 1;
+  }
+  to {
+    transform: scale(20) rotate(960deg) translate(-50%, -50%);
+    opacity: 0;
+  }
+}
+
+
+$particles: 60;
+$width: 500;
+$height: 400;
+
+$box-shadow: ();
+$box-shadow2: ();
+@for $i from 0 through $particles {
+  $box-shadow: $box-shadow,
+  random($width)-$width / 2 + px random($height)-$height / 1.2 + px hsl(random(360), 100, 50);
+  $box-shadow2: $box-shadow2, 0 0 #fff
+}
+
+@mixin keyframes($animationName) {
+  @-webkit-keyframes #{$animationName} {
+    @content;
+  }
+
+  @-moz-keyframes #{$animationName} {
+    @content;
+  }
+
+  @-o-keyframes #{$animationName} {
+    @content;
+  }
+
+  @-ms-keyframes #{$animationName} {
+    @content;
+  }
+
+  @keyframes #{$animationName} {
+    @content;
+  }
+}
+
+@mixin animation-delay($settings) {
+  -moz-animation-delay: $settings;
+  -webkit-animation-delay: $settings;
+  -o-animation-delay: $settings;
+  -ms-animation-delay: $settings;
+  animation-delay: $settings;
+}
+
+@mixin animation-duration($settings) {
+  -moz-animation-duration: $settings;
+  -webkit-animation-duration: $settings;
+  -o-animation-duration: $settings;
+  -ms-animation-duration: $settings;
+  animation-duration: $settings;
+}
+
+@mixin animation($settings) {
+  -moz-animation: $settings;
+  -webkit-animation: $settings;
+  -o-animation: $settings;
+  -ms-animation: $settings;
+  animation: $settings;
+}
+
+@mixin transform($settings) {
+  transform: $settings;
+  -moz-transform: $settings;
+  -webkit-transform: $settings;
+  -o-transform: $settings;
+  -ms-transform: $settings;
+}
+
+.pyro > .before, .pyro > .after {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  box-shadow: $box-shadow2;
+  @include animation((1s bang ease-out infinite backwards, 1s gravity ease-in infinite backwards, 5s position linear infinite backwards));
+}
+
+.pyro > .after {
+  @include animation-delay((1.25s, 1.25s, 1.25s));
+  @include animation-duration((1.25s, 1.25s, 6.25s));
+}
+
+@include keyframes(bang) {
+  to {
+    box-shadow: $box-shadow;
+  }
+}
+
+@include keyframes(gravity) {
+  to {
+    @include transform(translateY(200px));
+    opacity: 0;
+  }
+}
+
+@include keyframes(position) {
+  0%, 19.9% {
+    margin-top: 10%;
+    margin-left: 40%;
+  }
+  20%, 39.9% {
+    margin-top: 40%;
+    margin-left: 30%;
+  }
+  40%, 59.9% {
+    margin-top: 20%;
+    margin-left: 70%
+  }
+  60%, 79.9% {
+    margin-top: 30%;
+    margin-left: 20%;
+  }
+  80%, 99.9% {
+    margin-top: 30%;
+    margin-left: 80%;
+  }
+}

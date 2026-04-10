@@ -1,0 +1,86 @@
+<section class="content permission-rule-container">
+  <div class="container-fluid">
+    <div class="my-filter">
+      <div class="card card-info card-tabs">
+        <div class="card-header p-0 pt-1">
+          <nav class="nav nav-tabs" id="myTab">
+            <a class="nav-link active" data-bs-toggle="tab" href="#one" id="one-tab" onKeyDown="">
+              Quản lý nhóm quyền</a>
+            <a class="nav-link" data-bs-toggle="tab" href="#two" id="two-tab">Quản lý nhóm quyền theo vị trí công việc</a>
+            <a class="nav-link" data-bs-toggle="tab" href="#three" id="three-tab">Lịch sử cập nhật</a>
+          </nav>
+        </div>
+        <div class="card-body">
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="one">
+              <div class="row">
+                <div class="col-12 col-md-4 item">
+                  <label>Nhập ID/Tên nhóm quyền</label>
+                  <input (keypress)="eventButton($event)"
+                         [(ngModel)]="element.textSearch"
+                         placeholder="Mã nhân viên, Email hoặc Họ và tên" type="text"/>
+                </div>
+                <div class="col-12 col-md-4 col-xl-2 item date-range">
+                  <label>Từ ngày - Đến ngày</label>
+                  <div class="date-select">
+                    <mat-date-range-input [rangePicker]="rangePicker">
+                      <input [(ngModel)]="element.dateStart" matStartDate placeholder="dd/mm/yyyy" readonly>
+                      <input [(ngModel)]="element.dateEnd" matEndDate placeholder="dd/mm/yyyy" readonly>
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle [for]="rangePicker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #rangePicker></mat-date-range-picker>
+                  </div>
+                </div>
+                <div class="group-btn-filter">
+                  <button (click)="getData()" class="btn btn-info" type="button">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <div>Tìm kiếm</div>
+                  </button>
+                  <button (click)="getData()" [disabled]="!(dataTable && dataTable.length > 0)" class="btn btn-primary"
+                          type="button">
+                    <i class="fa-solid fa-download"></i>
+                    <div>Xuất báo cáo</div>
+                  </button>
+                </div>
+              </div>
+              <ng-container *ngIf="dataTable && element.typeSearch === 'depart'">
+                <div *ngIf="dataTable && dataTable.length === 0" style="padding-top: 20px">Không có dữ
+                  liệu
+                </div>
+                <div *ngIf="dataTable && dataTable.length > 0" class="my-table">
+                  <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                      <th style="position: sticky; left: -1px; display: block; background: white; border-bottom: 0">Lịch
+                        sử
+                      </th>
+                      <th>STT</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr
+                      *ngFor="let d of dataTable | paginate: { itemsPerPage: itemPerPage, currentPage: page, totalItems: totalItems}, let i = index">
+                    </tr>
+                    </tbody>
+                  </table>
+                  <app-pagination-template (itemPerPageEvent)="itemPerPage = $event"
+                                           (pageEvent)="pageChangeEvent($event)"
+                                           [itemPerPage]="itemPerPage"
+                                           [total]="totalItems"></app-pagination-template>
+                </div>
+              </ng-container>
+            </div>
+            <div class="tab-pane fade" id="two">
+              two
+            </div>
+            <div class="tab-pane fade" id="three">
+              three
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-spinner-layout></app-spinner-layout>

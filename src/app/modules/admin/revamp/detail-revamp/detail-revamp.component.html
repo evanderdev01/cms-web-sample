@@ -1,0 +1,130 @@
+<div class="detail-revamp-container">
+  <div class="modal-header">
+    <h5 class="modal-title"><strong>Chi tiết bài viết</strong></h5>
+    <button type="button" class="close" (click)="decline()">
+      <span aria-hidden="true" style="color: white">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="profile">
+      <div class="avatar">
+        <img class="img-fluid img-circle"
+             [src]="obj.avatarImg && obj.avatarImg !== '' ? obj.avatarImg : 'assets/images/male_default.jpg'" alt="">
+      </div>
+      <div class="user col-9">
+        <div class="name">{{obj.fullName}} - {{obj.branch}}</div>
+        <span>{{obj.emailCreate}}</span>
+        <div class="type-title">{{obj.typeTitle}}</div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="item-rate">
+        <b>Đánh giá bài viết:</b>
+        <input type="checkbox" id="rate-checkbox">
+        <label for="rate-checkbox">{{obj.avgRate}}
+          <ng-container *ngIf="obj.avgRate >= 1">
+            <i style="color: #ffc300;" class="fa-solid fa-star"></i>
+          </ng-container>
+          <ng-container *ngIf="obj.avgRate < 1">
+            <i class="fa-regular fa-star"></i>
+          </ng-container>
+
+          <ng-container *ngIf="obj.avgRate >= 2">
+            <i style="color: #ffc300;" class="fa-solid fa-star"></i>
+          </ng-container>
+          <ng-container *ngIf="obj.avgRate < 2">
+            <i class="fa-regular fa-star"></i>
+          </ng-container>
+
+          <ng-container *ngIf="obj.avgRate >= 3">
+            <i style="color: #ffc300;" class="fa-solid fa-star"></i>
+          </ng-container>
+          <ng-container *ngIf="obj.avgRate < 3">
+            <i class="fa-regular fa-star"></i>
+          </ng-container>
+
+          <ng-container *ngIf="obj.avgRate >= 4">
+            <i style="color: #ffc300;" class="fa-solid fa-star"></i>
+          </ng-container>
+          <ng-container *ngIf="obj.avgRate < 4">
+            <i class="fa-regular fa-star"></i>
+          </ng-container>
+
+          <ng-container *ngIf="obj.avgRate >= 5">
+            <i style="color: #ffc300;" class="fa-solid fa-star"></i>
+          </ng-container>
+          <ng-container *ngIf="obj.avgRate < 5">
+            <i class="fa-regular fa-star"></i>
+          </ng-container>
+          / {{obj.list_rate.length}}
+        </label>
+        <i class="fa-solid fa-chevron-right"></i>
+        <div class="list-rate">
+          <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <th>Điểm đánh giá</th>
+              <th>Email</th>
+              <th>Nội dung đánh giá</th>
+              <th>Thời gian</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let l of obj.list_rate">
+              <td>{{l.rate}}*</td>
+              <td>{{l.email}}</td>
+              <td>{{l.content}}</td>
+              <td>{{l.createdAt}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="name">{{obj.nameImprovedCar}}</div>
+      <div class="item">
+        <div class="title"><i class="fa-solid fa-face-frown"></i>Thực trạng</div>
+        <div class="content">{{obj.currentStatus}}</div>
+      </div>
+      <div class="item">
+        <div class="title"><i class="fa-solid fa-face-grin-hearts"></i>Mục tiêu</div>
+        <div class="content">{{obj.purpose}}</div>
+      </div>
+      <div class="item">
+        <div class="title"><i class="fa-solid fa-screwdriver-wrench"></i>Giải pháp</div>
+        <div class="content">{{obj.solution}}</div>
+      </div>
+      <div class="item row" *ngIf="imageList && imageList.length > 0">
+        <div class="image col-4" *ngFor="let l of imageList; let i = index">
+          <img src="{{l}}" (click)="openImage(i, imageList)" onKeyDown="">
+        </div>
+      </div>
+    </div>
+    <div class="list-cmt">
+      <div class="sum-react">
+        <div class="like">
+          <i class="fa-solid fa-heart"></i> {{obj.sumLike}}
+          <div class="list-like" *ngIf="obj.list_like && obj.list_like.length > 0">
+            <div *ngFor="let l of obj.list_like">{{l.email}}</div>
+          </div>
+        </div>
+        <div class="comment">{{obj.sumComment}} bình luận</div>
+      </div>
+      <div class="item" *ngFor="let l of obj.list_comment">
+        <div class="avatar">
+          <img class="img-fluid img-circle"
+               [src]="obj.avatarImg && obj.avatarImg !== '' ? obj.avatarImg : 'assets/images/male_default.jpg'" alt="">
+        </div>
+        <div class="post">
+          <div class="content">
+            <div class="email">{{l.email}}</div>
+            <div class="cmt">{{l.msg}}</div>
+          </div>
+          <span>{{l.create}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" (click)="decline()">Thoát</button>
+  </div>
+</div>

@@ -17,9 +17,6 @@ import {LinkPipe} from "../_pipe/link.pipe";
 import {NgbPopoverModule} from "@ng-bootstrap/ng-bootstrap";
 import {PiechartComponent} from './component/piechart/piechart.component';
 import {NgxPaginationModule} from "ngx-pagination";
-import {PickerModule} from "@ctrl/ngx-emoji-mart";
-import {NgbTimepickerModule} from "@ng-bootstrap/ng-bootstrap";
-import {NgxImageZoomModule} from "ngx-image-zoom";
 import {PaginationTemplateComponent} from './pagination-template/pagination-template.component';
 import {MatButtonModule} from "@angular/material/button";
 import {ControlSidebarComponent} from './component/control-sidebar/control-sidebar.component';
@@ -52,11 +49,8 @@ const MODULE = [
   NgxSpinnerModule,
   NgbPopoverModule,
   NgxPaginationModule,
-  PickerModule,
-  NgbTimepickerModule,
-  NgxImageZoomModule,
   MatTooltipModule
-];
+]
 
 @NgModule({
   declarations: [
@@ -73,5 +67,6 @@ const MODULE = [
     ConfirmationDialogService
   ]
 })
+
 export class SharedModule {
 }

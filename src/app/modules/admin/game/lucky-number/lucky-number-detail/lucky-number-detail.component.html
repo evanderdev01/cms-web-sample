@@ -1,0 +1,45 @@
+<div class="lucky-number-detail-container">
+  <!-- Background animation -->
+  <div class="background">
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+  </div>
+
+  <div class="title">
+    <div class="image">
+      <img src="assets/images/lucky-number-title.png" alt="">
+    </div>
+    <h1>Quay số may mắn</h1>
+  </div>
+
+  <div class="number-container">
+    <div class="number" id="num1">{{randomNumber1}}</div>
+    <div class="number" id="num2">{{randomNumber2}}</div>
+    <div class="number" id="num3">{{randomNumber3}}</div>
+    <div class="number" id="num4">{{randomNumber4}}</div>
+    <div class="number" id="num5">{{randomNumber5}}</div>
+    <div class="number" id="num6">{{randomNumber6}}</div>
+  </div>
+
+  <div class="group-btn" *ngIf="!isPlay">
+    <button (click)="getPrize()">Bắt đầu</button>
+  </div>
+
+  <div class="result">
+    <ng-container *ngIf="resultGame && !isError">
+      <div>Chúc mừng Anh/Chị: {{resultGame.ho_va_ten.toUpperCase()}} - {{resultGame.emp_code}}</div>
+      <div>{{resultGame.email}} - Bộ phận: {{resultGame.phong_ban}}</div>
+    </ng-container>
+    <ng-container *ngIf="isError">
+      <div>{{messageError}}</div>
+    </ng-container>
+  </div>
+
+  <div class="pyro" *ngIf="resultGame && !isError">
+    <div class="before"></div>
+    <div class="after"></div>
+  </div>
+</div>

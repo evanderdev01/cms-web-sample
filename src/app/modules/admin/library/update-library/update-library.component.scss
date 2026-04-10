@@ -1,0 +1,19 @@
+.update-library-container {
+  .modal-header {
+    background-color: #17a2b8;
+    color: white;
+  }
+
+  .modal-body {
+    .body-inner {
+      display: flex;
+      flex-direction: column;
+
+      textarea {
+        border-color: #dbdbdb;
+        padding: 0.75rem;
+        outline: none;
+      }
+    }
+  }
+}

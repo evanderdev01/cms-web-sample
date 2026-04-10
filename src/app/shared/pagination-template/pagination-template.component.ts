@@ -1,24 +1,34 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-pagination-template',
-  template: `
-    <div class="d-flex justify-content-between align-items-center mt-2">
-      <div>
-        <span>Total: {{totalItems}}</span>
-      </div>
-      <pagination-controls (pageChange)="onPageChange($event)"
-                           [maxSize]="5">
-      </pagination-controls>
-    </div>
-  `,
-  styles: []
+  templateUrl: './pagination-template.component.html',
+  styleUrls: ['./pagination-template.component.scss']
 })
-export class PaginationTemplateComponent {
-  @Input() totalItems: number = 0;
-  @Output() pageChanged = new EventEmitter<number>();
+export class PaginationTemplateComponent implements OnInit {
+  itemPerPageList = [5, 10, 15, 20, 25, 30];
+  page = 1;
+  @Input() maxSize = 7;
+  @Input() total: any;
+  @Input() itemPerPage = 10;
+  @Input() showPerPage = true;
+  @Output() pageEvent: EventEmitter<any> = new EventEmitter();
+  @Output() itemPerPageEvent: EventEmitter<any> = new EventEmitter();
 
-  onPageChange(page: number) {
-    this.pageChanged.emit(page);
+  constructor() {
+  }
+
+  ngOnInit(): void {
+  }
+
+  selectPage(e) {
+    this.page = e;
+    this.pageEvent.emit(this.page);
+  }
+
+  selectItemPerPage(e) {
+    this.itemPerPage = e;
+    this.itemPerPageEvent.emit(e);
+    this.selectPage(1);
   }
 }

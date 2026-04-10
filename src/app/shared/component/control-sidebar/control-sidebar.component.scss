@@ -1,0 +1,25 @@
+.control-sidebar {
+  color: white;
+  background: linear-gradient(174.09deg, #9fa5a3 -1.31%, #347178 72.35%);
+  box-shadow: 0 1px 5px #8a8a8a;
+  padding: 0.8rem 1rem;
+  margin-top: -1px;
+
+  .main {
+    .title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .list-item {
+      .item {
+        margin-bottom: 0.4rem;
+
+        &:last-child {
+          margin-bottom: 1.5rem;
+        }
+      }
+    }
+  }
+}

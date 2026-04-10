@@ -1,67 +1,77 @@
-import {APP_INITIALIZER, NgModule} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {SharedModule} from "./shared/shared.module";
-import {JwtModule} from "@auth0/angular-jwt";
-import {AuthService} from "./_services/auth/auth.service";
-import {GoogleLoginProvider, SocialAuthService, SocialAuthServiceConfig} from "angularx-social-login";
-import {environment} from "../environments/environment";
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-import {EnvironmentsService} from "./_services/environments.service";
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {HealthComponent} from './modules/health/health.component';
-import {JwtInterceptors} from "./_helpers/jwt.interceptor";
-import {AuthGuard} from "./_services/auth/auth.guard";
+
+import {JwtInterceptor} from './_helpers/jwt.interceptor';
+import {AuthService} from './_services/auth/auth.service';
+import {AuthGuard} from './_services/auth/auth.guard';
+import {EnvironmentsService} from './_services/environments.service';
+import {CrypterService} from './_services/auth/crypter.service';
+
+import {GeneralService} from './_services/data/general.service';
+import {ProfileService} from './_services/data/profile.service';
+import {ChatService} from './_services/data/chat.service';
+import {ActivityLogService} from './_services/data/activity-log.service';
+import {MediaService} from './_services/data/media.service';
+import {CompanyService} from './_services/data/company.service';
+import {GameService} from './_services/data/game.service';
+import {JobService} from './_services/data/job.service';
+import {RecruitService} from './_services/data/recruit.service';
+import {CheckinService} from './_services/data/checkin.service';
+
+import {JwtModule} from '@auth0/angular-jwt';
+import {NgxSpinnerModule} from 'ngx-spinner';
+
+export function tokenGetter() {
+  return localStorage.getItem('accessToken');
+}
+
+export function initializeApp(envService: EnvironmentsService) {
+  return () => envService.init();
+}
 
 @NgModule({
   declarations: [
     AppComponent,
-    HealthComponent,
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
-    SharedModule,
     HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxSpinnerModule,
     JwtModule.forRoot({
       config: {
-        tokenGetter: jwtTokenGetter
+        tokenGetter: tokenGetter,
+        allowedDomains: ['localhost:4200'],
       }
     }),
-    BrowserAnimationsModule,
   ],
   providers: [
-    AuthGuard,
     AuthService,
-    SocialAuthService,
+    AuthGuard,
     EnvironmentsService,
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false,
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(environment.googleClientId),
-          },
-        ],
-      } as SocialAuthServiceConfig,
-    },
-    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptors, multi: true},
-    {
-      provide: APP_INITIALIZER,
-      useFactory: (envService: EnvironmentsService) => () => envService.init(),
-      deps: [EnvironmentsService],
-      multi: true,
-    },
+    CrypterService,
+    GeneralService,
+    ProfileService,
+    ChatService,
+    ActivityLogService,
+    MediaService,
+    CompanyService,
+    GameService,
+    JobService,
+    RecruitService,
+    CheckinService,
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
   ],
   bootstrap: [AppComponent]
 })
-
 export class AppModule {
-}
-
-export function jwtTokenGetter() {
-  return localStorage.getItem('accessToken');
 }

@@ -1,0 +1,83 @@
+<div class="add-library-container">
+  <div class="modal-header">
+    <h5 class="modal-title"><strong>Thêm tài liệu</strong></h5>
+    <button type="button" class="close" (click)="decline()">
+      <span aria-hidden="true" style="color: white">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-12 item">
+        <app-select-template [itemList]="typeList" [label]="'Loại tài liệu'" [multiple]="false"
+                             (dataEvent)="receiveSelectEvent($event)"
+                             [bindValue]="'value'" [bindLabel]="'name'" [closeOnSelect]="true" [item]="typeSelect">
+        </app-select-template>
+      </div>
+      <ng-container *ngIf="typeSelect !== 'MEETING_MINUTES'">
+        <div class="col-12 item">
+          <label>Tên tài liệu</label>
+          <input type="text" class="search" [(ngModel)]="elementLibrary.nameDocument"/>
+        </div>
+        <div class="col-12 item">
+          <app-select-template [itemList]="branchList" [label]="'Tài liệu hiển thị cho đơn vị'" [multiple]="false"
+                               [bindValue]="'value'" [bindLabel]="'label'"
+                               [item]="elementLibrary.branch" [closeOnSelect]="true" [clearable]="false"
+                               (dataEvent)="receiveSelectEvent($event, 'branch')">
+          </app-select-template>
+        </div>
+        <div class="col-12 item">
+          <label>Tải File (.pdf, .doc, .docx)</label>
+          <input type="file" name="file" accept="{{typeFile}}" (change)="receiveFile($event)" placeholder="Tải file"/>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="typeSelect === 'MEETING_MINUTES'">
+        <div class="col-12 item">
+          <label>Tên tài liệu</label>
+          <input type="text" class="search" [(ngModel)]="elementMeeting.nameMeeting"/>
+        </div>
+        <div class="col-12 item">
+          <label>Ngày diễn ra cuộc họp</label>
+          <div class="date-select">
+            <input type="text" placeholder="Ngày họp" [(ngModel)]="elementMeeting.dateMeeting" [matDatepicker]="picker1"
+                   readonly/>
+            <mat-datepicker-toggle [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </div>
+        </div>
+        <ng-container *ngIf="parentDepartList">
+          <div class="col-12 col-md-4 item" *ngIf="parentDepartList.length > 1">
+            <app-select-template [itemList]="parentDepartList" [label]="'Vùng'"
+                                 [item]="parentDepartSelect" [multiple]="true"
+                                 [bindValue]="'parentDepart'" [bindLabel]="'parentDepart'" [groupBy]="'branch'"
+                                 (dataEvent)="receiveSelectEvent($event, 'parentDepart')">
+            </app-select-template>
+          </div>
+          <div class="col-12 col-md-4 item">
+            <app-select-template [itemList]="childDepartList" [label]="'Bộ phận'"
+                                 [disabled]="parentDepartSelect.length === 0 || (parentDepartList.length <= 1 && childDepartList.length <= 1)"
+                                 [item]="elementMeeting.childDepart" [multiple]="true"
+                                 [bindValue]="'childDepart'" [bindLabel]="'childDepart'" [groupBy]="'parentDepart'"
+                                 (dataEvent)="receiveSelectEvent($event, 'childDepart')">
+            </app-select-template>
+          </div>
+          <div class="col-12 col-md-4 item">
+            <app-select-template [itemList]="empEmailList" [label]="'Mail nhân viên'" [multiple]="true"
+                                 [disabled]="elementMeeting.childDepart.length === 0"
+                                 [item]="elementMeeting.authEmail"
+                                 (dataEvent)="receiveSelectEvent($event, 'authEmail')">
+            </app-select-template>
+          </div>
+        </ng-container>
+
+        <div class="col-12 item">
+          <label>Tải File (.pdf, .doc, .docx)</label>
+          <input type="file" name="file" accept="{{typeFile}}" (change)="receiveFile($event)" placeholder="Tải file"/>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="modal-footer justify-content-between">
+    <button type="button" class="btn btn-default" (click)="decline()">Thoát</button>
+    <button type="button" class="btn btn-primary" (click)="addLibrary()">Đăng tài liệu</button>
+  </div>
+</div>

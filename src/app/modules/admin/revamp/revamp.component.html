@@ -1,0 +1,175 @@
+<section class="content revamp-container">
+  <div class="container-fluid">
+    <div class="my-filter">
+      <div class="card card-primary card-outline">
+        <div class="card-body">
+          <div class="group-radio justify-content-between">
+            <label class="container">Xem theo bộ phận
+              <input [(ngModel)]="searchItem.typeSearch" name="radio" type="radio" value="depart">
+              <span class="checkmark"></span>
+            </label>
+            <label class="container">Xem theo cá nhân
+              <input [(ngModel)]="searchItem.typeSearch" name="radio" type="radio" value="person">
+              <span class="checkmark"></span>
+            </label>
+          </div>
+          <div *ngIf="allChildDepartList && allChildDepartList.length > 0" class="row">
+            <ng-container *ngIf="searchItem.typeSearch === 'depart'">
+              <div *ngIf="allChildDepartList.length > 1 && allParentDepartList.length > 1" class="col-6 col-md-2 item">
+                <app-select-template (dataEvent)="receiveSelectEvent($event, 'parentDepart')"
+                                     [bindLabel]="'parentDepart'" [bindValue]="'parentDepart'" [groupBy]="'branch'"
+                                     [itemList]="parentDepartList" [item]="searchItem.parentDepart" [label]="'Vùng *'"
+                                     [multiple]="true">
+                </app-select-template>
+              </div>
+              <div *ngIf="allChildDepartList.length > 1 && allUnitList.length > 1" class="col-6 col-md-2 item">
+                <app-select-template (dataEvent)="receiveSelectEvent($event, 'unit')" [bindLabel]="'unit'"
+                                     [bindValue]="'unit'" [groupBy]="'parentDepart'" [itemList]="unitList"
+                                     [item]="searchItem.unit" [label]="'Đơn vị *'" [multiple]="true">
+                </app-select-template>
+              </div>
+              <div class="col-6 col-md-2 item">
+                <app-select-template (dataEvent)="receiveSelectEvent($event, 'childDepart')" [bindLabel]="'childDepart'"
+                                     [bindValue]="'childDepart'" [disabled]="allChildDepartList.length <= 1"
+                                     [groupBy]="'unit'" [itemList]="childDepartList" [item]="searchItem.childDepart"
+                                     [label]="'Bộ phận *'" [multiple]="true">
+                </app-select-template>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="searchItem.typeSearch === 'person'">
+              <div class="col-12 col-md-4 item">
+                <label>Tìm kiếm</label>
+                <input (keypress)="eventButton($event)" (ngModelChange)="isEmptyPerson = false"
+                       [(ngModel)]="searchItem.textSearch" placeholder="Mã nhân viên, Email hoặc Họ và tên"
+                       type="text"/>
+              </div>
+            </ng-container>
+            <div class="col-6 col-md-3 col-xl-2 item">
+              <app-select-template (dataEvent)="receiveSelectEvent($event, 'listTypeTitle')" [bindLabel]="'name'"
+                                   [bindValue]="'id'" [itemList]="typeTitleList" [item]="searchItem.listTypeTitle"
+                                   [label]="'Lĩnh vực'" [multiple]="true">
+              </app-select-template>
+            </div>
+            <div class="col-12 col-md-3 col-xl-2 item date-range">
+              <label>Từ ngày - Đến ngày</label>
+              <div class="date-select">
+                <mat-date-range-input [max]="maxDate" [rangePicker]="rangePicker">
+                  <input [(ngModel)]="searchItem.startDate" matStartDate placeholder="dd/mm/yyyy" readonly>
+                  <input [(ngModel)]="searchItem.endDate" matEndDate placeholder="dd/mm/yyyy" readonly>
+                </mat-date-range-input>
+                <mat-datepicker-toggle [for]="rangePicker"></mat-datepicker-toggle>
+                <mat-date-range-picker #rangePicker></mat-date-range-picker>
+              </div>
+            </div>
+            <div *ngIf="isEmptyPerson && searchItem.typeSearch === 'person'" class="note">
+              Vui lòng nhập nhân sự cần xem thông tin!
+            </div>
+            <div class="group-btn-filter">
+              <button (click)="getData()" class="btn btn-info" type="button">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <div>Xem</div>
+              </button>
+              <button (click)="exportData()"
+                      [disabled]="!((dataTableDepart && searchItem.typeSearch === 'depart') || (dataTablePerson && searchItem.typeSearch === 'person'))"
+                      class="btn btn-primary" type="button">
+                <i class="fa-solid fa-download"></i>
+                <div>Xuất báo cáo</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="dataTableDepart && searchItem.typeSearch === 'depart'" class="my-table">
+      <div class="card">
+        <div class="card-body">
+          <div *ngIf="dataTableDepart.length === 0">Không có dữ liệu</div>
+          <ng-container *ngIf="dataTableDepart.length > 0">
+            <table class="table table-bordered table-striped">
+              <thead>
+              <tr>
+                <th style="position: sticky; left: 0; display: block; background: white; border-bottom: 0">Chi tiết</th>
+                <ng-container *ngFor="let c of columnTable">
+                  <th *ngIf="c !== 'id'">{{dictKeyList[c]}}</th>
+                </ng-container>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let d of dataTableDepart
+              | paginate: { itemsPerPage: itemPerPageDepart, currentPage: pageDepart, totalItems: totalItemsDepart }">
+                <td (click)="openDetail(d)" onKeyDown=""
+                    style="text-align: center; cursor: pointer; color: #6378e6; position: sticky; left: 0; background: white">
+                  <i class="fas fa-edit"></i>
+                </td>
+                <ng-container *ngFor="let c of columnTable">
+                  <td *ngIf="c !== 'id'">
+                    <ng-container
+                      *ngIf="c === 'nameImprovedCar' || c === 'currentStatus' || c === 'purpose' || c === 'solution'">
+                      <span>{{d[c]}}</span>
+                    </ng-container>
+                    <ng-container
+                      *ngIf="c !== 'nameImprovedCar' && c !== 'currentStatus' && c !== 'purpose' && c !== 'solution'">
+                      {{d[c]}}
+                    </ng-container>
+                  </td>
+                </ng-container>
+              </tr>
+              </tbody>
+            </table>
+            <app-pagination-template (itemPerPageEvent)="itemPerPageDepart = $event"
+                                     (pageEvent)="pageChangeEvent($event)"
+                                     [itemPerPage]="itemPerPageDepart"
+                                     [total]="totalItemsDepart"></app-pagination-template>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="dataTablePerson && searchItem.typeSearch === 'person'" class="my-table">
+      <div class="card">
+        <div class="card-body">
+          <div *ngIf="dataTablePerson.length === 0">Không có dữ liệu</div>
+          <ng-container *ngIf="dataTablePerson.length > 0">
+            <table class="table table-bordered table-striped">
+              <thead>
+              <tr>
+                <th style="position: sticky; left: 0; display: block; background: white; border-bottom: 0">Chi tiết</th>
+                <ng-container *ngFor="let c of columnTable">
+                  <th *ngIf="c !== 'id'">{{dictKeyList[c]}}</th>
+                </ng-container>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let d of dataTablePerson
+              | paginate: { itemsPerPage: itemPerPagePerson, currentPage: pagePerson, totalItems: totalItemsPerson }">
+                <td (click)="openDetail(d)" onKeyDown=""
+                    style="text-align: center; cursor: pointer; color: #6378e6; position: sticky; left: 0; background: white">
+                  <i class="fas fa-edit"></i>
+                </td>
+                <ng-container *ngFor="let c of columnTable">
+                  <td *ngIf="c !== 'id'">
+                    <ng-container
+                      *ngIf="c === 'nameImprovedCar' || c === 'currentStatus' || c === 'purpose' || c === 'solution'">
+                      <span>{{d[c]}}</span>
+                    </ng-container>
+                    <ng-container
+                      *ngIf="c !== 'nameImprovedCar' && c !== 'currentStatus' && c !== 'purpose' && c !== 'solution'">
+                      {{d[c]}}
+                    </ng-container>
+                  </td>
+                </ng-container>
+              </tr>
+              </tbody>
+            </table>
+            <app-pagination-template (itemPerPageEvent)="itemPerPagePerson = $event"
+                                     (pageEvent)="pageChangeEvent($event)"
+                                     [itemPerPage]="itemPerPagePerson"
+                                     [total]="totalItemsPerson"></app-pagination-template>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-spinner-layout></app-spinner-layout>

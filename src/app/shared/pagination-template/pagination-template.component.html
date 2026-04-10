@@ -1,0 +1,17 @@
+<div class="pagination-container">
+  <div class="sum-pagination">
+    <div class="select-page" *ngIf="showPerPage">
+      <div style="width: 55px">
+        <app-select-template [itemList]="itemPerPageList" [multiple]="false" [closeOnSelect]="true"
+                             [item]="itemPerPage" (dataEvent)="selectItemPerPage($event)" [class]="'custom drop-up'">
+        </app-select-template>
+      </div>
+      <div style="margin-left: 5px">rows</div>
+    </div>
+    <pagination-controls (pageChange)="selectPage($event)" previousLabel="Previous" nextLabel="Next"
+                         [responsive]="true" [maxSize]="maxSize"></pagination-controls>
+  </div>
+  <div class="sum-page">
+    <div>Row {{ (page - 1) * itemPerPage + 1 }} - {{ page * itemPerPage }} of {{ total }} rows</div>
+  </div>
+</div>

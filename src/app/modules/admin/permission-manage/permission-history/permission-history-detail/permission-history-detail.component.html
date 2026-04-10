@@ -1,0 +1,78 @@
+<div class="permission-history-detail-container">
+  <div class="modal-header">
+    <h5 class="modal-title"><strong>Chi tiết cập nhật - ID: {{obj.logId}}</strong></h5>
+    <button type="button" class="close" (click)="decline()">
+      <span aria-hidden="true" style="color: white">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="item">
+      <div class="title">Thông tin nhân sự</div>
+      <div class="info">
+        <div class="left">
+          <div class="line">Email: {{obj.email}}</div>
+          <ng-container *ngIf="!obj.childDepartOld">
+            <div class="line">Phòng ban: {{obj.childDepart}}</div>
+          </ng-container>
+          <ng-container *ngIf="obj.childDepartOld">
+            <div class="line" style="color: #3789d1;">Phòng ban mới: {{obj.childDepart}}</div>
+            <div class="line" style="color: #3789d1;">Phòng ban cũ: {{obj.childDepartOld}}</div>
+          </ng-container>
+        </div>
+        <div class="right">
+          <ng-container *ngIf="!obj.jobTitleOld">
+            <div class="line">Vị trí công việc: {{obj.jobTitle}}</div>
+          </ng-container>
+          <ng-container *ngIf="obj.jobTitleOld">
+            <div class="line" style="color: #3789d1;">Vị trí công việc mới: {{obj.jobTitle}}</div>
+            <div class="line" style="color: #3789d1;">Vị trí công việc cũ: {{obj.jobTitleOld}}</div>
+          </ng-container>
+          <div class="line"></div>
+          <ng-container *ngIf="!obj.jobCodeOld">
+            <div class="line">Mã vị trí: {{obj.jobCode}}</div>
+          </ng-container>
+          <ng-container *ngIf="obj.jobCodeOld">
+            <div class="line" style="color: #3789d1;">Mã vị trí mới: {{obj.jobCode}}</div>
+            <div class="line" style="color: #3789d1;">Mã vị trí cũ: {{obj.jobCodeOld}}</div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="title">Thông tin cập nhật</div>
+      <div class="table">
+        <div class="line">
+          <div class="left">Hành động</div>
+          <div class="right">{{obj.actionType}}</div>
+        </div>
+        <div class="line">
+          <div class="left">Nhóm quyền</div>
+          <div class="right">{{obj.jobPerGroupName}}</div>
+        </div>
+        <div class="line">
+          <div class="left">Thời hạn sử dụng</div>
+          <div class="right">{{obj.limit}}</div>
+        </div>
+        <div class="line">
+          <div class="left">Trạng thái</div>
+          <div class="right">{{obj.statusPermission}}</div>
+        </div>
+        <div class="line">
+          <div class="left">Nguyên nhân</div>
+          <div class="right">{{obj.reasonName}}</div>
+        </div>
+        <div class="line">
+          <div class="left">Thời gian cập nhật</div>
+          <div class="right">{{obj.createdAt}}</div>
+        </div>
+        <div class="line">
+          <div class="left">Yêu cầu thực hiện bởi</div>
+          <div class="right">{{obj.performerType}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" (click)="decline()">Thoát</button>
+  </div>
+</div>

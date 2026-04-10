@@ -1,34 +1,34 @@
-import { Injectable } from '@angular/core';
-import {EnvironmentsService} from "../environments.service";
+import {Injectable} from '@angular/core';
 import * as CryptoJS from 'crypto-js';
+import {EnvironmentsService} from '../environments.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class CrypterService {
-  private key: any;
-  private iv: any;
+  key: any;
+  iv: any;
 
   constructor(private envService: EnvironmentsService) {
-    this.key = CryptoJS.enc.Utf8.parse(envService.encryptKey);
-    this.iv = CryptoJS.enc.Utf8.parse(envService.encryptIV);
+    this.key = CryptoJS.enc.Utf8.parse(this.envService.cryptKey);
+    this.iv = CryptoJS.enc.Utf8.parse(this.envService.cryptIv);
   }
 
-  encrypt(value) {
-    const ciphertext = CryptoJS.AES.encrypt(value, this.key, {
-      keySize: 16,
+  encrypt(value: string): string {
+    const encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(value), this.key, {
+      keySize: 128 / 8,
       iv: this.iv,
-      mode: CryptoJS.mode.CBC
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7
     });
-    return ciphertext.toString();
+    return encrypted.toString();
   }
 
-  decrypt(value) {
-    const decryptedData = CryptoJS.AES.decrypt(value, this.key, {
-      keySize: 16,
+  decrypt(value: string): string {
+    const decrypted = CryptoJS.AES.decrypt(value, this.key, {
+      keySize: 128 / 8,
       iv: this.iv,
-      mode: CryptoJS.mode.CBC
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7
     });
-    return decryptedData.toString(CryptoJS.enc.Utf8);
+    return decrypted.toString(CryptoJS.enc.Utf8);
   }
 }

@@ -1,66 +1,45 @@
 import {Injectable} from '@angular/core';
 import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router} from '@angular/router';
-import {Observable} from 'rxjs';
-import {AuthService} from "./auth.service";
+import {AuthService} from './auth.service';
 
-@Injectable({providedIn: 'root'})
+@Injectable()
 export class AuthGuard implements CanActivate {
+  constructor(private authService: AuthService, private router: Router) {
+  }
 
-  constructor(private router: Router, private authService: AuthService) {}
-
-  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    const arrayUrl = window.location.href.split('?code=');
-
-    if (!this.authService.getAccessToken() && !arrayUrl[1]) {
-      this.authService.deleteLocalStorage();
-      if (state.url.includes('/login')) {
-        return true;
-      } else {
-        this.router.navigate(['/guest/login']);
-        return false;
-      }
-    } else if (!this.authService.getAccessToken() && arrayUrl[1]) {
-      this.authService.deleteLocalStorage();
-      const content = {
-        code: arrayUrl[1].split('&session_state')[0]
-      };
-      this.authService.getToken(content).subscribe((res) => {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    // Check for Azure AD callback code
+    if (route.queryParams['code']) {
+      this.authService.getToken({code: route.queryParams['code']}).subscribe((res) => {
         if (res && res.statusCode === 1) {
+          localStorage.setItem('accessToken', res.data.accessToken);
+          localStorage.setItem('refreshToken', res.data.refreshToken);
           localStorage.setItem('userToken', res.data.userToken);
-          const tokenContent = {
-            userToken: this.authService.getUserToken(),
-            grantType: "account_credentials_grant",
-            refreshToken: "",
-            lang: "vi"
-          };
-          this.authService.getARToken(tokenContent, res.data.timeToken).subscribe((res2) => {
-            if (res2 && res2.statusCode === 1) {
-              localStorage.setItem('accessToken', res2.data.accessToken);
-              localStorage.setItem('refreshToken', res2.data.refreshToken);
-              this.authService.getInfoUser().subscribe((res3) => {
-                if (res3 && res3.statusCode === 1) {
-                  sessionStorage.setItem('userInfo', JSON.stringify(res3.data));
-                  this.authService.emitChange('user_info');
-                }
-              });
-            }
-          });
+          this.router.navigate(['/api/auth/dashboard']);
+        } else {
+          this.router.navigate(['/guest/login']);
         }
+      }, () => {
+        this.router.navigate(['/guest/login']);
       });
-      return true;
-    } else if (this.authService.getAccessToken()) {
-      if (state.url.includes('/login')) {
+      return false;
+    }
+
+    // If on login page and already have token, redirect to dashboard
+    if (state.url.includes('guest/login')) {
+      if (this.authService.getAccessToken()) {
         this.router.navigate(['/api/auth/dashboard']);
-      } else {
-        this.authService.getInfoUser().subscribe((res) => {
-          if (res && res.statusCode === 1) {
-            sessionStorage.setItem('userInfo', JSON.stringify(res.data));
-            this.authService.emitChange('user_info');
-          }
-        });
+        return false;
       }
       return true;
     }
+
+    // For protected routes, check for token
+    if (this.authService.getAccessToken()) {
+      return true;
+    }
+
+    this.router.navigate(['/guest/login']);
     return false;
   }
 }

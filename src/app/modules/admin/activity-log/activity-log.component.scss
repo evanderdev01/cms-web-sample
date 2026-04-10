@@ -1,0 +1,130 @@
+.activity-log-container {
+  padding: 15px 0.5rem;
+
+  .container-fluid {
+    .my-filter {
+      .card-body {
+        padding: 0 1.25rem 1.25rem 1.25rem;
+
+        .row {
+          .item {
+            padding-top: 0.75rem;
+
+            input {
+              padding: 4px 10px;
+              border-radius: 4px;
+              border: 1px solid #dbdbdb;
+              width: 100%;
+              outline: none;
+            }
+          }
+        }
+
+        .tab-content {
+          .tab-pane {
+            .my-chart {
+              margin-top: 25px;
+            }
+
+            table {
+              white-space: nowrap;
+              overflow: auto;
+              display: block;
+              margin-top: 15px;
+
+              &> :not(:first-child) {
+                border-top: 0;
+              }
+
+              tbody {
+                tr {
+                  td {
+                    span {
+                      overflow: hidden;
+                      display: -webkit-box;
+                      -webkit-line-clamp: 3;
+                      -webkit-box-orient: vertical;
+                      white-space: break-spaces;
+                    }
+                  }
+                }
+              }
+            }
+
+            .accordion {
+              .accordion-item {
+                .accordion-header {
+                  .accordion-button {
+                    font-weight: bold;
+                    padding: 10px 20px;
+                  }
+                }
+
+                .accordion-collapse {
+                  .accordion-body {
+                    padding: 0;
+
+                    table {
+                      margin: 0;
+                    }
+                  }
+                }
+
+                &:last-child {
+                  .accordion-header {
+                    .accordion-button {
+                      background: #376dbf;
+                      color: white;
+                      font-size: 1.2rem;
+
+                      &::after {
+                        display: none;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        .note {
+          color: #e50000;
+          margin-top: 8px;
+          margin-bottom: -8px;
+        }
+
+        .group-btn-filter {
+          width: fit-content;
+          height: fit-content;
+          margin-top: auto;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .activity-log-container {
+    .container-fluid {
+      .my-filter {
+        .card-body {
+          .tab-content {
+            .tab-pane {
+              .accordion {
+                .accordion-item {
+                  .accordion-header {
+                    .accordion-button {
+                      font-size: 13px;
+                      padding: 6px 10px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

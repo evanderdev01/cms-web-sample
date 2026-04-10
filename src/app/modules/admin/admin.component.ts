@@ -14,7 +14,8 @@ export class AdminComponent implements OnInit {
   animation: any;
   animationList = animationList;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {
+  }
 
   ngOnInit(): void {
     if (localStorage.getItem('theme')) {

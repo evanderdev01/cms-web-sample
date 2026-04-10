@@ -132,6 +132,10 @@ export class AuthService {
     return this.envService.downloadUrl;
   }
 
+  getPowerBIUrl() {
+    return this.envService.powerBIUrl;
+  }
+
   deleteLocalStorage() {
     localStorage.removeItem('userToken');
     localStorage.removeItem('accessToken');

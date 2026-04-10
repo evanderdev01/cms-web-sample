@@ -1,76 +1,50 @@
 import {Injectable} from '@angular/core';
 
-export enum Environment {
-  Prod = 'prod',
-  Staging = 'staging',
-  Dev = 'dev',
-  Local = 'local',
-}
-
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class EnvironmentsService {
-  private _env!: Environment;
-  private _apiUrl!: string;
-  private _downloadUrl!: string;
-  private _encryptKey!: string;
-  private _encryptIV!: string;
+  apiUrl: any;
+  downloadUrl: any;
+  powerBIUrl: any;
+  cryptKey: any;
+  cryptIv: any;
 
-  constructor() {}
-
-  init(): Promise<void> {
-    return new Promise(resolve => {
-      this.setEnvVariables();
-      resolve();
-    });
+  constructor() {
   }
 
-  get env(): Environment {
-    return this._env;
+  init(): Promise<any> {
+    return new Promise((resolve) => {
+      this.setEnvVariables();
+      resolve(true);
+    });
   }
 
   private setEnvVariables(): void {
     const hostname = window && window.location && window.location.hostname;
 
-    if (hostname.includes('localhost')) {
-      this._env = Environment.Local;
-      this._apiUrl = 'https://api-dev.example.com';
-      this._downloadUrl = 'https://api-dev.example.com';
-    } else if (hostname === 'cms-dev.example.com') {
-      this._env = Environment.Dev;
-      this._apiUrl = 'https://api-dev.example.com';
-      this._downloadUrl = 'https://api-dev.example.com';
-    } else if (hostname === 'cms-stag.example.com') {
-      this._env = Environment.Staging;
-      this._apiUrl = 'https://api-stag.example.com';
-      this._downloadUrl = 'https://api-stag.example.com';
-    } else if (hostname === 'cms.example.com') {
-      this._env = Environment.Prod;
-      this._apiUrl = 'https://api.example.com';
-      this._downloadUrl = 'https://api.example.com';
+    if (/^localhost/.test(hostname)) {
+      // Local development
+      this.apiUrl = 'http://localhost:8080';
+      this.downloadUrl = 'http://localhost:8080/download';
+      this.powerBIUrl = 'https://app.powerbi.com';
+    } else if (/^dev\./.test(hostname)) {
+      // Development environment
+      this.apiUrl = 'https://dev-api.example.com';
+      this.downloadUrl = 'https://dev-api.example.com/download';
+      this.powerBIUrl = 'https://app.powerbi.com';
+    } else if (/^staging\./.test(hostname)) {
+      // Staging environment
+      this.apiUrl = 'https://staging-api.example.com';
+      this.downloadUrl = 'https://staging-api.example.com/download';
+      this.powerBIUrl = 'https://app.powerbi.com';
     } else {
-      console.warn(`Cannot find environment for host name ${hostname}`);
+      // Production
+      this.apiUrl = 'https://api.example.com';
+      this.downloadUrl = 'https://api.example.com/download';
+      this.powerBIUrl = 'https://app.powerbi.com';
     }
 
-    // TODO: Replace with your own encryption key and IV
-    this._encryptKey = 'YOUR_32_CHAR_ENCRYPTION_KEY_HERE';
-    this._encryptIV = 'YOUR_16_CHAR_IV_';
-  }
-
-  get apiUrl(): string {
-    return this._apiUrl;
-  }
-
-  get downloadUrl(): string {
-    return this._downloadUrl;
-  }
-
-  get encryptKey(): string {
-    return this._encryptKey;
-  }
-
-  get encryptIV(): string {
-    return this._encryptIV;
+    // Encryption keys - replace with your own in production
+    this.cryptKey = 'YOUR_CRYPT_KEY_HERE';
+    this.cryptIv = 'YOUR_CRYPT_IV_HERE';
   }
 }

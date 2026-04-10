@@ -1,0 +1,32 @@
+.chart-detail-container {
+  .modal-header {
+    background-color: #17a2b8;
+    color: white;
+  }
+
+  .modal-body {
+    overflow: auto;
+
+    .row {
+      .item {
+        padding-top: 0.75rem;
+
+        input {
+          padding: 4px 10px;
+          border-radius: 4px;
+          border: 1px solid #dbdbdb;
+          width: 100%;
+          outline: none;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .chart-detail-container {
+    .modal-body {
+      overflow: auto;
+    }
+  }
+}
